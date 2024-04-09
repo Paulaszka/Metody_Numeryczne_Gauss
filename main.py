@@ -1,27 +1,7 @@
 import numpy as np
-
-
-def wyswietl_macierz(macierz):
-    for wiersz1 in macierz:
-        for element in wiersz1:
-            print(round(element, 4), end=" ")
-        print()
-
-
-def podstawianie_w_tyl(macierz):
-    n = len(macierz)
-    x = [0] * n
-
-    for t in range(n - 1, -1, -1):
-        x[t] = macierz[t][n] / macierz[t][t]
-
-        for p in range(t - 1, -1, -1):
-            macierz[p][n] -= macierz[p][t] * x[t]
-    return x
-
+from functions import *
 
 print("Podaj ilosc rownan. (Min 2, Max 10)")
-
 
 poprawna_wartosc = True
 
@@ -70,42 +50,45 @@ lista3 = []
 iterator = 0
 
 while not uklad_sprzeczny and not uklad_oznaczony and not uklad_nieoznaczony:
-    if iterator < ilosc_rownan:
+    if iterator < ilosc_rownan - 1:
         if lista_glowna[iterator][iterator] != 0:
+            czy_same_zera = False
             for wiersz in lista_glowna:
                 czy_same_zera = all(element == 0 for element in wiersz)
-                if czy_same_zera:
-                    uklad_nieoznaczony = True
-                    print("Znaleziono nieskonczone rozwiazania")
-                    print(lista_glowna)
-                else:
-                    for m in range(ilosc_rownan):
-                        lista2.append(lista_glowna[iterator][m])
-                    index1 = lista2.index(max(lista2))
-                    lista3.append(lista_glowna[iterator])
-                    for g in range(ilosc_rownan+1):
-                        lista_glowna[iterator][g] = lista_glowna[index1][g]
-                        lista_glowna[index1][g] = lista3[g]
-
-                    for k in range(ilosc_rownan-1):
-                        for i in range(k+1, ilosc_rownan):
-                            wspolczynnik = lista_glowna[i][k] / lista_glowna[k][k]
-                            for j in range(k, ilosc_rownan+1):
-                                lista_glowna[i][j] -= wspolczynnik * lista_glowna[k][j]
-                                iterator += 1
+            if czy_same_zera:
+                uklad_nieoznaczony = True
+                print("Znaleziono nieskonczone rozwiazania")
+                print(lista_glowna)
+            else:
+                for m in range(iterator, ilosc_rownan):
+                    lista2.append(lista_glowna[m][iterator])
+                index1 = lista2.index(max(lista2))
+                print(lista2)
+                lista2 = []
+                if iterator != index1:
+                    for g in range(ilosc_rownan-iterator):
+                        lista_glowna[iterator][iterator+g], lista_glowna[iterator+index1][iterator+g] = lista_glowna[iterator+index1][iterator+g], lista_glowna[iterator][iterator+g]
+                for k in range(ilosc_rownan-1):
+                    for i in range(k+1, ilosc_rownan):
+                        wspolczynnik = lista_glowna[i][k] / lista_glowna[k][k]
+                        for j in range(k, ilosc_rownan+1):
+                            lista_glowna[i][j] -= wspolczynnik * lista_glowna[k][j]
+            iterator += 1
         else:
             uklad_sprzeczny = True
             print("Uklad jest sprzeczny")
             print(lista_glowna)
     else:
+        wyswietl_macierz(lista_glowna)
         uklad_oznaczony = True
         print("Znaleziono rozwiazanie")
-        print(lista_glowna)
+
+
+
+if uklad_sprzeczny: print("Uklad jest sprzeczny")
 
 if uklad_oznaczony:
     solution = podstawianie_w_tyl(lista_glowna)
     print("Rozwiązanie:")
     for i, val in enumerate(solution):
         print(f"x{i+1} = {val}")
-
-wyswietl_macierz(lista_glowna)
