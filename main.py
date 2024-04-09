@@ -30,7 +30,6 @@ while poprawna_wartosc:
 
 if wybor_danych == 1:
     lista_glowna = np.genfromtxt("data.txt", delimiter=',').tolist()
-    print(lista_glowna)
 
 if wybor_danych == 2:
     lista_glowna = []
@@ -41,6 +40,5 @@ if wybor_danych == 2:
             cyfra = float(input(f"Podaj cyfrę dla równania {i+1}, element {j+1}: (Ostatni element to y) "))
             lista1.append(cyfra)
         lista_glowna.append(lista1)
-    print(lista_glowna)
 
 gauss(ilosc_rownan, lista_glowna)
