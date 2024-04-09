@@ -67,12 +67,17 @@ while not uklad_sprzeczny and not uklad_oznaczony and not uklad_nieoznaczony:
                 lista2 = []
                 if iterator != index1:
                     for g in range(ilosc_rownan-iterator):
-                        lista_glowna[iterator][iterator+g], lista_glowna[iterator+index1][iterator+g] = lista_glowna[iterator+index1][iterator+g], lista_glowna[iterator][iterator+g]
-                for k in range(ilosc_rownan-1):
-                    for i in range(k+1, ilosc_rownan):
-                        wspolczynnik = lista_glowna[i][k] / lista_glowna[k][k]
-                        for j in range(k, ilosc_rownan+1):
-                            lista_glowna[i][j] -= wspolczynnik * lista_glowna[k][j]
+                        lista_glowna[iterator][iterator+g], lista_glowna[iterator+index1][iterator+g]\
+                            = lista_glowna[iterator+index1][iterator+g], lista_glowna[iterator][iterator+g]
+                for a in range(ilosc_rownan):
+                    if lista_glowna[a][a] == 0:
+                        uklad_sprzeczny = True
+                if not uklad_sprzeczny:
+                    for k in range(ilosc_rownan-1):
+                        for i in range(k+1, ilosc_rownan):
+                            wspolczynnik = lista_glowna[i][k] / lista_glowna[k][k]
+                            for j in range(k, ilosc_rownan+1):
+                                lista_glowna[i][j] -= wspolczynnik * lista_glowna[k][j]
             iterator += 1
         else:
             uklad_sprzeczny = True
@@ -84,11 +89,11 @@ while not uklad_sprzeczny and not uklad_oznaczony and not uklad_nieoznaczony:
         print("Znaleziono rozwiazanie")
 
 
-
-if uklad_sprzeczny: print("Uklad jest sprzeczny")
+if uklad_sprzeczny:
+    print("Uklad jest sprzeczny")
 
 if uklad_oznaczony:
     solution = podstawianie_w_tyl(lista_glowna)
     print("Rozwiązanie:")
     for i, val in enumerate(solution):
-        print(f"x{i+1} = {val}")
+        print(f"x{i+1} = {round(val, 2)}")
